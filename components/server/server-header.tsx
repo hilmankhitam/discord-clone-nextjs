@@ -1,6 +1,6 @@
 "use client";
 
-import { ServerWithMembersWithProfile } from "@/type";
+import { ServerWithMembersWithProfiles } from "@/type";
 import { MemberRole } from "@prisma/client";
 import {
   ChevronDown,
@@ -22,7 +22,7 @@ import {
 import { useModal } from "@/hooks/use-modal-store";
 
 interface ServerHeaderProps {
-  server: ServerWithMembersWithProfile;
+  server: ServerWithMembersWithProfiles;
   role?: MemberRole;
 }
 
@@ -60,7 +60,10 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className="cursor-pointer px-4 py-2 text-sm ">
+          <DropdownMenuItem
+            onClick={() => onOpen("members", { server })}
+            className="cursor-pointer px-4 py-2 text-sm "
+          >
             Manage Members
             <Users className="ml-auto h-4 w-4" />
           </DropdownMenuItem>
