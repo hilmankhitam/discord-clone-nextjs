@@ -32,7 +32,6 @@ export const DeleteServerModal = () => {
 
       onClose();
       router.refresh();
-      window.location.reload();
     } catch (error) {
       console.log(error);
     } finally {

@@ -1,5 +1,6 @@
 "use client";
 
+import qs from "query-string";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -15,20 +16,26 @@ import {
 import { useModal } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
 
-export const LeaveServerModal = () => {
+export const DeleteChannelModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "leaveServer";
-  const { server } = data;
+  const isModalOpen = isOpen && type === "deleteChannel";
+  const { server, channel } = data;
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
     try {
       setIsLoading(true);
+      const url = qs.stringifyUrl({
+        url: `/api/channels/${channel?.id}`,
+        query: {
+          serverId: server?.id,
+        },
+      });
 
-      await axios.patch(`/api/servers/${server?.id}/leave`);
+      await axios.delete(url);
 
       onClose();
       router.refresh();
@@ -44,14 +51,14 @@ export const LeaveServerModal = () => {
       <DialogContent className="overflow-hidden bg-white p-0 text-black">
         <DialogHeader className="px-6 pt-8">
           <DialogTitle className="text-center text-2xl font-bold">
-            Leave Server
+            Delete Channel
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Are you sure you want to leave{" "}
+            Are you sure you want to do this? <br />
             <span className="font-semibold text-indigo-500">
-              {server?.name}
-            </span>
-            ?
+              #{channel?.name}
+            </span>{" "}
+            will be permanently deleted
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">
